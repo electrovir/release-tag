@@ -1,0 +1,1 @@
+-   also include `npm pack` output
