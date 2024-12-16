@@ -19,8 +19,8 @@ export function createReleaseBody(
     >,
 ): string {
     const commitLines = commits.map((commit) => {
-        const truncatedMessage = commit.message.slice(0, 50);
-        const leftoverMessage = commit.message.slice(50);
+        const truncatedMessage = commit.message.slice(0, 100);
+        const leftoverMessage = commit.message.slice(100);
 
         const fullMessage = [
             truncatedMessage,
