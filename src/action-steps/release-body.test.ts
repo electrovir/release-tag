@@ -9,8 +9,7 @@ describe(createReleaseBody.name, () => {
             it: 'formats an empty body',
             inputs: [
                 {
-                    tag: 'previous-tag',
-                    version: '0.0.1',
+                    tag: 'v0.0.1',
                 },
                 [
                     {
@@ -25,9 +24,11 @@ describe(createReleaseBody.name, () => {
                         owner: 'owner',
                         repo: 'repo',
                     },
+                    tagName: 'v0.0.2',
                 },
             ],
-            expect: `Previous: [previous-tag](https://github.com/owner/repo/releases/tag/previous-tag)
+            expect: `Previous: [v0.0.1](https://github.com/owner/repo/releases/tag/v0.0.1)
+Compare: [v0.0.1...v0.0.2](https://github.com/owner/repo/compare/v0.0.1...v0.0.2)
 
 ## Commits
 
@@ -37,8 +38,7 @@ describe(createReleaseBody.name, () => {
             it: 'formats a basic body',
             inputs: [
                 {
-                    tag: 'previous-tag',
-                    version: '0.0.1',
+                    tag: 'v0.0.1',
                 },
                 [
                     {
@@ -53,9 +53,11 @@ describe(createReleaseBody.name, () => {
                         owner: 'owner',
                         repo: 'repo',
                     },
+                    tagName: 'v0.0.2',
                 },
             ],
-            expect: `Previous: [previous-tag](https://github.com/owner/repo/releases/tag/previous-tag)
+            expect: `Previous: [v0.0.1](https://github.com/owner/repo/releases/tag/v0.0.1)
+Compare: [v0.0.1...v0.0.2](https://github.com/owner/repo/compare/v0.0.1...v0.0.2)
 
 ## Commits
 
@@ -66,14 +68,14 @@ describe(createReleaseBody.name, () => {
             it: 'truncates a long message',
             inputs: [
                 {
-                    tag: 'previous-tag',
-                    version: '0.0.1',
+                    tag: 'v0.0.1',
                 },
                 [
                     {
                         hash: 'hash',
                         author: 'author',
-                        message: 'basic message that is way too long it just keeps going on and on',
+                        message:
+                            'git commit message that is way too long it just keeps going on and on it needs to be really long for this to actually wrap',
                         body: 'this is a body',
                     },
                 ],
@@ -82,28 +84,30 @@ describe(createReleaseBody.name, () => {
                         owner: 'owner',
                         repo: 'repo',
                     },
+                    tagName: 'v0.0.2',
                 },
             ],
-            expect: `Previous: [previous-tag](https://github.com/owner/repo/releases/tag/previous-tag)
+            expect: `Previous: [v0.0.1](https://github.com/owner/repo/releases/tag/v0.0.1)
+Compare: [v0.0.1...v0.0.2](https://github.com/owner/repo/compare/v0.0.1...v0.0.2)
 
 ## Commits
 
- - hash (author): basic message that is way too long it just keeps g...
-    ...oing on and on
+ - hash (author): git commit message that is way too long it just keeps going on and on it needs to be really long for...
+    ...this to actually wrap
     this is a body`,
         },
         {
             it: 'handles multiple commits',
             inputs: [
                 {
-                    tag: 'previous-tag',
-                    version: '0.0.1',
+                    tag: 'v0.0.1',
                 },
                 [
                     {
                         hash: 'hash',
                         author: 'author',
-                        message: 'basic message that is way too long it just keeps going on and on',
+                        message:
+                            'git commit message that is way too long it just keeps going on and on it needs to be really long for this to actually wrap',
                         body: 'this is a body',
                     },
                     {
@@ -130,14 +134,16 @@ describe(createReleaseBody.name, () => {
                         owner: 'owner',
                         repo: 'repo',
                     },
+                    tagName: 'v0.0.2',
                 },
             ],
-            expect: `Previous: [previous-tag](https://github.com/owner/repo/releases/tag/previous-tag)
+            expect: `Previous: [v0.0.1](https://github.com/owner/repo/releases/tag/v0.0.1)
+Compare: [v0.0.1...v0.0.2](https://github.com/owner/repo/compare/v0.0.1...v0.0.2)
 
 ## Commits
 
- - hash (author): basic message that is way too long it just keeps g...
-    ...oing on and on
+ - hash (author): git commit message that is way too long it just keeps going on and on it needs to be really long for...
+    ...this to actually wrap
     this is a body
  - hash 2 (author 2): basic message
  - hash 3 (author 3): basic message

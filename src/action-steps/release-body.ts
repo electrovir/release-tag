@@ -5,22 +5,24 @@ import type {Commit} from './list-commits.js';
 import {TaggedVersion} from './versions.js';
 
 export function createReleaseBody(
-    previous: Readonly<TaggedVersion> | undefined,
+    previous: Readonly<Pick<TaggedVersion, 'tag'>> | undefined,
     commits: ReadonlyArray<Readonly<Commit>>,
     {
         repo,
+        tagName,
     }: Readonly<
         SelectFrom<
             ActionParams,
             {
+                tagName: true;
                 repo: true;
             }
         >
     >,
 ): string {
     const commitLines = commits.map((commit) => {
-        const truncatedMessage = commit.message.slice(0, 100);
-        const leftoverMessage = commit.message.slice(100);
+        const truncatedMessage = commit.message.slice(0, 100).trim();
+        const leftoverMessage = commit.message.slice(100).trim();
 
         const fullMessage = [
             truncatedMessage,
@@ -53,13 +55,16 @@ export function createReleaseBody(
         ].join('');
     });
 
+    const previousLines = previous
+        ? [
+              `Previous: [${previous.tag}](https://github.com/${repo.owner}/${repo.repo}/releases/tag/${previous.tag})`,
+              `Compare: [${previous.tag}...${tagName}](https://github.com/${repo.owner}/${repo.repo}/compare/${previous.tag}...${tagName})`,
+              '',
+          ]
+        : [];
+
     return [
-        ...(previous
-            ? [
-                  `Previous: [${previous.tag}](https://github.com/${repo.owner}/${repo.repo}/releases/tag/${previous.tag})`,
-                  '',
-              ]
-            : []),
+        ...previousLines,
         '## Commits',
         '',
         ...commitLines,
