@@ -1,5 +1,5 @@
 import {check} from '@augment-vir/assert';
-import {filterMap, type SelectFrom} from '@augment-vir/common';
+import {filterMap, safeMatch, type SelectFrom} from '@augment-vir/common';
 import type {ActionParams} from '../util/action-params.js';
 import type {Commit} from './list-commits.js';
 import {TaggedVersion} from './versions.js';
@@ -21,12 +21,20 @@ export function createReleaseBody(
     >,
 ): string {
     const commitLines = commits.map((commit) => {
-        const truncatedMessage = commit.message.slice(0, 100).trim();
-        const leftoverMessage = commit.message.slice(100).trim();
+        const truncatedTitle = commit.message.slice(0, 100).trim();
+        const leftoverTitle = commit.message.slice(100).trim();
+        const [
+            ,
+            titlePrefixForBolding,
+            restOfTheTitle,
+            // eslint-disable-next-line sonarjs/slow-regex
+        ] = safeMatch(truncatedTitle, /(\[[^\]]+?\])(.+)/);
 
         const fullMessage = [
-            truncatedMessage,
-            leftoverMessage ? '...' : '',
+            titlePrefixForBolding
+                ? `**${titlePrefixForBolding}**${restOfTheTitle}`
+                : truncatedTitle,
+            leftoverTitle ? '...' : '',
         ].join('');
 
         const indentedBody = filterMap(
@@ -42,7 +50,7 @@ export function createReleaseBody(
         ).join('\n');
 
         const fullBody = [
-            leftoverMessage ? '    ...' + leftoverMessage + '\n' : '',
+            leftoverTitle ? '    ...' + leftoverTitle + '\n' : '',
             indentedBody,
         ].join('');
 

@@ -35,6 +35,35 @@ Compare: [v0.0.1...v0.0.2](https://github.com/owner/repo/compare/v0.0.1...v0.0.2
  - hash (author): basic message`,
         },
         {
+            it: 'handles a versioning prefix',
+            inputs: [
+                {
+                    tag: 'v0.0.1',
+                },
+                [
+                    {
+                        hash: 'hash',
+                        author: 'author',
+                        message: '[minor] basic message',
+                        body: '',
+                    },
+                ],
+                {
+                    repo: {
+                        owner: 'owner',
+                        repo: 'repo',
+                    },
+                    tagName: 'v0.0.2',
+                },
+            ],
+            expect: `Previous: [v0.0.1](https://github.com/owner/repo/releases/tag/v0.0.1)
+Compare: [v0.0.1...v0.0.2](https://github.com/owner/repo/compare/v0.0.1...v0.0.2)
+
+## Commits
+
+ - hash (author): **[minor]** basic message`,
+        },
+        {
             it: 'formats a basic body',
             inputs: [
                 {
